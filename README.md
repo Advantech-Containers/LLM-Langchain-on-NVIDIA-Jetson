@@ -3,8 +3,7 @@
 **Version:** 2.0
 **Release Date:** November 2025
 **Copyright:** © 2025 Advantech Corporation. All rights reserved.
-
-> **Troubleshooting**: For common issues and solutions, please visit our [Troubleshooting Wiki](https://github.com/yqlbu/jetson-packages-family/wiki/Troubleshooting).
+>  Check our [Troubleshooting Wiki](https://github.com/Advantech-EdgeSync-Containers/GPU-Passthrough-on-NVIDIA-Jetson/wiki/Advantech-Containers'-Troubleshooting-Guide) for common issues and solutions.
 
 ## Overview
 LLM Langchain on NVIDIA Jetson™ Image delivers a modular, high-performance AI chat solution tailored for Jetson™ edge devices. It combines Ollama with the Meta Llama 3.2 1B model for LLM inference, a FastAPI-based Langchain middleware for orchestration and tool integration, and OpenWebUI for an intuitive user interface. The container supports Retrieval-Augmented Generation (RAG), tool-augmented reasoning, conversational memory, and custom LLM workflows, making it ideal for building intelligent, context-aware agents. It is fully optimized for hardware acceleration on Jetson™ platforms & provides a development environment to build RAGs and AI agent use cases.
@@ -138,7 +137,7 @@ This image uses Meta Llama 3.2 1B for inferencing; here are the details about th
 | GPU             | NVIDIA® Ampere architecture with 1024 CUDA® cores |
 | DLA Cores       | 1 (Deep Learning Accelerator)                     |
 | Memory          | 4/8/16 GB shared GPU/CPU memory                   |
-| JetPack Version | 6.0                                               |
+| JetPack Version | 6.x                                               |
 
 ## Software Components
 
@@ -152,8 +151,6 @@ The following software components are available in the base image:
 | PyTorch      | 2.0.0+nv23.02  | Deep learning framework            |
 | TensorFlow   | 2.12.0         | Machine learning framework         |
 | ONNX Runtime | 1.16.3         | Cross-platform inference engine    |
-| VPI          | 3.2.4          | Vision Programming Interface       |
-| Vulkan       | 1.3.204        | Graphics and compute API           |
 | OpenCV       | 4.8.0          | Computer vision library with CUDA® |
 | GStreamer    | 1.16.2         | Multimedia framework               |
 
@@ -171,13 +168,17 @@ The following software components/packages are provided further inside the conta
 
 ---
 
+## Before you start
 # Before You Start
-
+- Ensure the following components are installed on your host system:
 Ensure the following prerequisites are met:
-
+  - **Docker** (v28.1.1 or compatible)
 - **Docker**: Version `28.1.1` or later
+  - **Docker Compose** (v2.39.1 or compatible)
 - **Docker Compose**: Version `2.39.1` or later
+  - **NVIDIA Container Toolkit** (v1.11.0 or compatible)
 - **NVIDIA Container Toolkit**: Version `1.11.0` or later
+  - **NVIDIA Runtime** configured in Docker
 
 For installation instructions, refer to the [Installation Guide](https://github.com/yqlbu/jetson-packages-family/blob/main/README.md).
 
@@ -213,10 +214,13 @@ chmod +x start_services.sh
 Allow some time for the OpenWebUI and Jetson™ LLM Langchain container to settle and become healthy.
 
 ### AI Accelerator and Software Stack Verification (Optional)
-```bash
+```
 # Verify AI Accelerator and Software Stack Inside Docker Container
-chmod +x /workspace/wise-bench.sh
-./workspace/wise-bench.sh
+# Under /workspace, run this command
+# Provide executable rights
+chmod +x wise-bench.sh
+# To run wise-bench.sh
+./wise-bench.sh
 ```
 
 ![langchain-wise-bench.png](data%2Fimages%2Flangchain-wise-bench.png)
@@ -334,7 +338,7 @@ Ollama APIs are accessible on the default endpoint (unless modified). If needed,
 
 Inference Request:
 ```
-curl http://localhost_or_Jetson_IP:11434/api/generate -d '{
+curl http://localhost:11434/api/generate -d '{
   "model": "llama3.2:1b",
   "prompt": "Why is the sky blue?",
   "stream": false
